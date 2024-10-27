@@ -1,0 +1,5 @@
+package com.BBC.login.repository;
+
+public interface CustomerRepo {
+
+}

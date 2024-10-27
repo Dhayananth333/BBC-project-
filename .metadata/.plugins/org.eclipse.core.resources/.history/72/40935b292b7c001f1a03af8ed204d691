@@ -1,0 +1,13 @@
+package com.BBC.login.contoller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class CustomerLogin {
+	
+	@GetMapping("/login")
+	public String helloWorld() {
+		return "Hello world";
+	}
+}

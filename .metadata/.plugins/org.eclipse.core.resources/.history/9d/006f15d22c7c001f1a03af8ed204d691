@@ -1,0 +1,5 @@
+package com.BBC.customer.model;
+
+public class Customer {
+
+}
