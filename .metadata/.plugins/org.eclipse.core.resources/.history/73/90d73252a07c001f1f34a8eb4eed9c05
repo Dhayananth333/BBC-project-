@@ -1,0 +1,22 @@
+package com.BBC.login.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.BBC.login.service.CustomerService;
+
+@RestController
+public class CustomerLogin {
+	
+	@Autowired
+	private CustomerService customerService;
+	
+	@GetMapping("/verify/{customerID}")
+	public boolean verifyCustomer(@PathVariable Long CustomerID) {
+		return customerService.checkCustomerExists(CustomerID);
+	}
+	
+	
+}

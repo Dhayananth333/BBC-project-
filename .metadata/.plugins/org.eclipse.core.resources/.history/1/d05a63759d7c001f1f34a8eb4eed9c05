@@ -1,0 +1,10 @@
+package com.BBC.login.repository;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+import com.BBC.customer.model.Customer;
+
+public interface CustomerRepo extends JpaRepository<Customer, Long>{
+	
+	boolean existsById(Long customerID);
+}
