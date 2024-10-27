@@ -1,0 +1,63 @@
+<div class="container-fluid">
+  <div class="form-container">
+    <div class="m-auto d-flex flex-column justify-content-center">
+      <img class="m-auto" src="image/avatar.png" width="50px" height="50px" alt="">
+      <h1 class="text-center">BBC Login</h1>
+    </div>
+
+    <form>
+      <div class="mb-3">
+        <label for="customerID" class="form-label">Customer ID</label>
+        <div class="input-group">
+          <input
+            id="customerID" type="number" class="form-control" oninput="if(this.value.length > 6) this.value = this.value.slice(0,6)"
+            [(ngModel)]="customerID" name="custID"
+            placeholder="Enter your Customer ID" required />
+          <button
+            type="button" class="btn btn-primary input-group-text" (click)="onArrowClick()" [disabled]="isCustomerIDVerified">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+
+        </div>
+        <div *ngIf="customerIDError" class="text-danger">
+          Please enter a valid numeric Customer ID.
+        </div>
+        <div *ngIf="customerIDNotFoundError" class="text-danger">
+          <small>Customer ID not found.</small>
+        </div>
+      </div>
+
+      <div class="mb-3" *ngIf="otpFieldVisible">
+        <label for="otp" class="form-label">OTP</label>
+        <div class="input-group">
+          <input type="number" id="otp" class="form-control" oninput="if(this.value.length > 6) this.value = this.value.slice(0,6)" name="otp"
+            [(ngModel)]="otp"
+            placeholder="Enter OTP"
+            required />
+          <button type="button" class="btn btn-primary input-group-text" (click)="validateOtp()">
+            <i class="bi bi-arrow-right"></i>
+          </button>
+        </div>
+
+        <div *ngIf="otpError" class="text-danger">
+          Wrong OTP. Please try again.
+        </div>
+
+        <div *ngIf="otpExpired" class="text-danger mt-2">
+          OTP has expired. Please generate a new one.
+        </div>
+
+        <div class="mt-3">
+          <button type="button" class="btn btn-primary input-group-text" (click)="onGenerateOtp()"
+            [disabled]="otpGenerationDisabled">
+            Generate OTP
+          </button>
+          <div class="text-muted me-2 mt-2">
+            Verify OTP in {{ remainingTime }} seconds.
+          </div>
+        </div>
+        
+      </div>
+    </form>
+  </div>
+</div>

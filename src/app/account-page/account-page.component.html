@@ -1,0 +1,21 @@
+<div class="container mt-4">
+  <h2>Customer Account</h2>
+    
+  <div *ngIf="isLoading" class="text-center my-4">
+    <div  class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="card mb-4 w-50" *ngIf="customerDetails">
+    <div class="card-header bg-dark text-white">Customer Details</div>
+      <div class="card-body">
+        <p><strong>Name:</strong> {{ customerDetails.name }}</p>
+        <p><strong>Email:</strong> {{ customerDetails.email }}</p>
+        <p><strong>Phone:</strong> {{ customerDetails.mobileNumber }}</p>
+        <p><strong>Address:</strong> {{ customerDetails.address }}</p>
+  </div>
+</div>
+  
+    
+  

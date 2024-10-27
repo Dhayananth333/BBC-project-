@@ -1,0 +1,54 @@
+<div class="container mt-4">
+  <h2 class="text-center">Bill Details</h2>
+
+  <div class="row mb-4">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4 text-end">
+      <label for="filter" class="form-label">Filter Bills:</label>
+      <select id="filter" class="form-select" [(ngModel)]="filterStatus" (change)="filterBills()">
+        <option value="All">All</option>
+        <option value="Pending">Pending</option>
+        <option value="Paid">Paid</option>
+      </select>
+    </div>
+  </div>
+  
+  <div *ngIf="isLoading" class="text-center my-4">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!isLoading">
+    <div class="col-md-4 mb-4" *ngFor="let bill of filteredBills">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h6 class="card-title mb-0">Bill ID: {{ bill.billId }}</h6>
+        </div>
+        <div class="card-body">
+          <p><strong>Unit Consumption:</strong> {{ bill.unit_consumption }}</p>
+          <p><strong>Bill Start Date:</strong> {{ bill.bill_start_date | date }}</p>
+          <p><strong>Bill End Date:</strong> {{ bill.bill_end_date | date }}</p>
+          <p><strong>Due Date:</strong> {{ bill.due_date | date }}</p>
+          <p><strong>Total Amount:</strong> {{ bill.total_amount | currency : 'INR' : 'symbol-narrow' : '1.2' }}</p>
+          
+          <div class="card-footer d-flex justify-content-between align-items-center mt-3">
+            <p class="mb-0">
+              <strong class="me-2">Status:</strong>
+              <span *ngIf="bill.status === 'Paid'" class="badge text-bg-success">Paid</span>
+              <span *ngIf="bill.status !== 'Paid'" class="badge text-bg-warning">{{ bill.status }}</span>
+            </p>
+
+            <ng-container *ngIf="bill.status === 'Paid'; else payButton">
+              <i class="bi bi-check-circle-fill text-success" style="font-size: 1.5rem;"></i>
+            </ng-container>
+            <ng-template #payButton>
+              <button class="btn btn-primary" (click)="goToPayment(bill.billId)">Pay</button>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

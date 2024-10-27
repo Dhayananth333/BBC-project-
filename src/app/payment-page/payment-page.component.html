@@ -1,0 +1,98 @@
+<div class="container-fluid mt-4">
+  <h3 class="text-center">Payment Page</h3>
+
+  <div class="row mt-3">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="text-center">Bill Details</h5>
+        </div>
+        <div class="card-body">
+          <p><strong>Bill ID:</strong> {{ billDetails?.billId }}</p>
+          <p><strong>Unit Consumption:</strong> {{ billDetails?.unitConsumption }}</p>
+          <p><strong>Due Date:</strong> {{ billDetails?.billDueDate | date:'MM/dd/yyyy' }}</p>
+
+          <p><strong>Total Amount:</strong>
+            <del *ngIf="netAmount && netAmount < billDetails?.amountDue">{{ billDetails?.amountDue | currency : 'INR' : 'symbol-narrow' : '1.2'}}</del>
+            <span *ngIf="!netAmount || netAmount >= billDetails?.amountDue">{{ billDetails?.amountDue | currency : 'INR' : 'symbol-narrow' : '1.2'}}</span>
+          </p>
+
+          <p *ngIf="netAmount && netAmount < billDetails?.amountDue"><strong>Net Amount (After Discount):</strong> {{ netAmount | currency : 'INR' : 'symbol-narrow' : '1.2' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h5 class="text-center">Payment Options</h5>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="paymentMethod"><strong>Select Payment Method:</strong></label>
+            <select id="paymentMethod" [(ngModel)]="selectedMethod" class="form-control" (ngModelChange)="calculateNetAmount()">
+              <option value="" disabled selected>Select Payment</option>
+              <option *ngFor="let method of paymentMethods" [value]="method">{{ method }}</option>
+            </select>
+          </div>
+    
+          <div *ngIf="selectedMethod === 'Credit Card' || selectedMethod === 'Debit Card'" class="mt-4">
+            <h5>Card Details</h5>
+            <div class="form-group mb-3">
+              <label for="cardNumber"><strong>Card Number:</strong></label>
+              <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-credit-card-fill"></i></span>
+                <input type="text" maxlength="16" id="cardNumber" [(ngModel)]="cardDetails.cardNumber" class="form-control" required 
+                       (ngModelChange)="validateCardNumber()">
+              </div>
+              <small class="text-danger" *ngIf="cardNumberError">{{ cardNumberError }}</small>
+            </div>
+          
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="expiryDate"><strong>Expiry Date:</strong></label>
+                  <input type="text" maxlength="5" id="expiryDate" [(ngModel)]="cardDetails.expiryDate" class="form-control" 
+                         placeholder="MM/YY" required (ngModelChange)="validateExpiryDate()">
+                  <small class="text-danger" *ngIf="expiryDateError">{{ expiryDateError }}</small>
+                </div>
+              </div>
+    
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label for="cvv"><strong>CVV:</strong></label>
+                  <input type="password" maxlength="3" id="cvv" [(ngModel)]="cardDetails.cvv" class="form-control" required 
+                         (ngModelChange)="validateCvv()">
+                  <small class="text-danger" *ngIf="cvvError">{{ cvvError }}</small>
+                </div>
+              </div>
+            </div>
+    
+            <div class="text-center">
+              <button class="btn btn-primary btn-block" (click)="verifyCard()">Pay {{ netAmount | currency : 'INR' : 'symbol-narrow' : '1.2' }}</button>
+            </div>
+
+            <div *ngIf="successMessage" class="alert alert-success mt-3 text-center">
+              {{ successMessage }}
+            </div>
+    
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+              {{ errorMessage }}
+            </div>
+          </div>
+    
+          <div *ngIf="otpField" class="mt-4">
+            <h5>Enter OTP</h5>
+            <div class="input-group mb-3">
+              <input type="number" class="form-control" oninput="if(this.value.length > 6) this.value = this.value.slice(0,6)" [(ngModel)]="otp" placeholder="Enter OTP" />
+              <div class="input-group-append">
+                <button class="btn btn-primary" (click)="verifyOtp()">Verify OTP</button>
+              </div>
+            </div>
+            <small class="text-danger">{{ otpError }}</small>
+          </div>
+        </div>
+      </div>
+    </div>    
+  </div>
+</div>  

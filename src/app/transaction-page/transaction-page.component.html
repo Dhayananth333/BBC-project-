@@ -1,0 +1,68 @@
+<div class="container mt-4">
+  <h2 class="text-center">Transaction History</h2>
+
+  <div class="row mb-4">
+    <div class="col-md-8">
+      
+    </div>
+    <div class="col-md-4 text-end">
+      <label for="filter" class="form-label">Filter by:</label>
+      <select id="filter" class="form-select" [(ngModel)]="selectedFilter" (change)="filterTransactions()">
+        <option value="all">All</option>
+        <option value="10days">Last 10 Days</option>
+        <option value="1month">Last Month</option>
+        <option value="3months">Last 3 Months</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center my-4">
+    <div class="spinner-border text-success" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <div class="row" *ngIf="!isLoading">
+    <div class="col-md-4 mb-4" *ngFor="let transaction of filteredTransactions">
+      <div class="card">
+        <div class="card-header bg-dark text-white">
+          <h6 class="card-title mb-0">Transaction Ref: {{ transaction.transaction_ref }}</h6>
+        </div>
+        <div class="card-body">
+          <p><strong>Customer Name:</strong> {{ transaction.customerName }}</p>
+          <p><strong>Bill ID:</strong> {{ transaction.bill.billId }}</p>
+          <p><strong>Payment Date:</strong> {{ transaction.paymentDate | date:'MM/dd/yyyy' }}</p>
+          <p><strong>Amount:</strong> {{ transaction.amount | currency:'INR':'symbol-narrow':'1.2' }}</p>
+          <p><strong>Discount:</strong> {{ transaction.discount | currency:'INR':'symbol-narrow':'1.2' }}</p>
+          <p><strong>Net Amount:</strong> {{ transaction.netAmount | currency:'INR':'symbol-narrow':'1.2' }}</p>
+          <p><strong>Payment Method:</strong> {{ transaction.paymentMethod }}</p>
+          <div class="card-footer">
+            <p><strong class="me-2">Payment Status:</strong>
+              <span class="badge text-bg-success p-2 rounded">
+                {{ transaction.paymentStatus }}
+              </span>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal template for warning -->
+  <ng-template #warningModal let-modal>
+    <div class="modal-dialog modal-lg"> <!-- Use modal-lg for larger size -->
+      <div class="modal-content">
+        <div class="modal-header d-flex justify-content-between">
+          <h5 class="modal-title">Warning</h5>
+          <i class="bi bi-x-square fs-5" (click)="closeModalAndNavigate()"></i>
+        </div>
+        <div class="modal-body">
+          <p class="text-center">No transaction history found for this bill.</p> <!-- Center the message -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" (click)="closeModalAndNavigate()">Go to Bill Page</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</div>
